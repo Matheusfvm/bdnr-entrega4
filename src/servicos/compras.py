@@ -46,23 +46,21 @@ def criarCompra(conexaoCassandra):
     print(f'\nCompra realizada com sucesso!\n')
 
 def listarCompras(conexaoCassandra):    
-    listaCompra = conexaoCassandra.execute("SELECT * FROM compra;")   
+    listaCompra = conexaoCassandra.execute("SELECT * FROM compra;")
+    indiceCompra = 1  
     for compra in listaCompra:
-        objetoCompra = compra._asdict()
-        indiceCompra = 1
+        compra = compra._asdict()
         print(f"\n{indiceCompra}º Compra\n")
-        """ print(f"CPF do usuário: {objetoCompra['usuario']['cpf']}") """
-        print(f"Data e hora da compra: {objetoCompra['datacompra']}")
-        print(f"Data entrega: {objetoCompra['dataentrega']}")
-        print(f"Valor total da compra: R${objetoCompra['valortotal']:.2f}")
+        print(f"Data e hora da compra: {compra['datacompra']}")
+        print(f"Data entrega: {compra['dataentrega']}")
+        print(f"Valor total da compra: R${compra['valortotal']:.2f}")
         print("\nProdutos\n")
-        objetoProdutoCompra = json.loads(objetoCompra['listaproduto'])
-        print(objetoProdutoCompra)
-        for produto in objetoProduto:
-            objetoProduto = json.loads(produto)
-            objetoVendedor = json.loads(objetoProduto['vendedor'])
-            print(f"Documento do vendedor: {objetoVendedor['documento']}")
+        objetoProdutoCompra = json.loads(compra['listaproduto'])
+        indiceCompra += 1
+        for produto in objetoProdutoCompra:
+            print(f"Documento do vendedor: {produto['vendedor']['documento']}")
             print(f"Descrição: {produto['descricao']}")
             print(f"Preço: {produto['preco']:.2f}")
             print(f"Quantidade: {produto['quantidadeProdutoCompra']}")
             print("\n---------------------------------------\n")
+            
