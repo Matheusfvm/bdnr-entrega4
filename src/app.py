@@ -52,7 +52,7 @@ while key != 'S':
             usuario.atualizarUsuario(conexaoCassandra)
 
         elif sub == "4":
-            print("\n----DELETAR USUÁRIO----")
+            print("\n----DELETAR USUÁRIO----\n")
             usuario.deletarUsuario(conexaoCassandra)
         
         elif sub == "5":
@@ -126,6 +126,6 @@ while key != 'S':
         
         if sub == "2":
             print("\n----LISTAR COMPRAS----\n")
-            compra.criarCompra(conexaoCassandra)
+            compra.listarCompras(conexaoCassandra)
     elif key == "S":
         break

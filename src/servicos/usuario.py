@@ -112,30 +112,41 @@ def deletarUsuario(conexaoCassandra):
         )
     print(f"\nUsuário {objetoUsuarioEscolhido['nome']} foi deletado com sucesso!\n")
 
-def vinculaCompraUsuario(listaProduto, data_entrega, data_compra, valorCompra, conexaoCassandra):
+def vinculaCompraUsuario(listaProdutoCompra, data_entrega, data_compra, valorCompra, conexaoCassandra):
     usuarioEscolhido = consultaUsuario(conexaoCassandra)
+    listaProduto = []
+    for produto in listaProdutoCompra:
+        objetoProduto = {
+            "descricao": produto['descricao'],
+            "preco": produto['preco'],
+            "quantidade": produto['quantidadeProdutoCompra'],
+            "vendedor": produto['vendedor']
+        }
+        listaProduto.append(objetoProduto)
     compra = {
         "listaProduto": listaProduto,
         "dataEntrega": data_entrega,
         "dataCompra": data_compra,
         "valorTotalCompra": valorCompra
     }
-    jsonCompra = json.dumps(compra)
+    listaCompraUsuario = json.loads(usuarioEscolhido['listacompra'])
+    listaCompraUsuario.append(compra)
+    jsonCompraUsuario = json.dumps(listaCompraUsuario)
     conexaoCassandra.execute(
             "UPDATE usuario SET listacompra = %s WHERE cpf = %s;",
-            (jsonCompra, usuarioEscolhido['cpf'])
+            (jsonCompraUsuario, usuarioEscolhido['cpf'])
             )
     return [usuarioEscolhido["nome"], usuarioEscolhido["cpf"]]
 
 def listarComprasUsuario(conexaoCassandra):
     objetoUsuarioEscolhido = consultaUsuario(conexaoCassandra)
-    objetoCompraUsuario = json.loads(objetoUsuarioEscolhido['listacompra'])
-    print("\nProdutos")
-    for compra in objetoCompraUsuario:
+    objetoUsuarioCompra = json.loads(objetoUsuarioEscolhido['listacompra'])
+    print("\nProdutos\n")
+    for compra in objetoUsuarioCompra:
         print(f"Data entrega: {compra['dataEntrega']}")
         print(f"Data da compra: {compra['dataCompra']}")
         print(f"Preço Total : R${compra['valorTotalCompra']}")
-        for produto in objetoCompraUsuario:
+        for produto in compra['listaProduto']:
             print(f"Descrição: {produto['descricao']}")
             print(f"Quantidade: {produto['quantidade']}")
             print("\n---------------------------------------\n")

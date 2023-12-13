@@ -1,4 +1,4 @@
-# Atividade MongoDB - Banco de Dados Não Relacional(Entrega 3)
+# Atividade Cassandra - Banco de Dados Não Relacional(Entrega 4)
 
 ## Informações
 - **Nome:** Matheus Fernando Vieira de Melo
